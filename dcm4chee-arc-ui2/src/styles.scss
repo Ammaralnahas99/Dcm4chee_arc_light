@@ -6126,3 +6126,142 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+
+/* Custom Patient Form Styling - Mint/Teal Theme */
+.patient-form-container {
+  background: linear-gradient(135deg, #e8f5f7 0%, #d4eef2 100%);
+  padding: 20px;
+  border-radius: 8px;
+
+  /* Input fields styling */
+  input[type="text"],
+  input[type="date"],
+  select,
+  .mat-form-field,
+  .mat-input-element {
+    background-color: #d4eef2 !important;
+    border: 1px solid #b8dfe5 !important;
+    border-radius: 6px !important;
+    padding: 10px 15px !important;
+    color: #2c5f6f !important;
+    transition: all 0.3s ease;
+
+    &:focus {
+      background-color: #c5e9ef !important;
+      border-color: #17a2b8 !important;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.1);
+    }
+
+    &::placeholder {
+      color: #7eb8c4 !important;
+    }
+  }
+
+  /* Dropdown/Select styling */
+  select,
+  .mat-select {
+    background-color: #d4eef2 !important;
+    border: 1px solid #b8dfe5 !important;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #c5e9ef !important;
+    }
+  }
+
+  /* Checkbox styling */
+  input[type="checkbox"] {
+    accent-color: #17a2b8;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  /* Labels */
+  label,
+  .mat-form-field-label {
+    color: #2c5f6f !important;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  /* Submit button styling */
+  button[type="submit"],
+  .submit-button,
+  button.mat-raised-button.mat-primary {
+    background-color: #17a2b8 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 12px 30px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(23, 162, 184, 0.2);
+
+    &:hover {
+      background-color: #138496 !important;
+      box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(23, 162, 184, 0.2);
+    }
+  }
+
+  /* Form field containers */
+  .mat-form-field-wrapper {
+    background-color: transparent !important;
+  }
+
+  /* Date picker styling */
+  input[type="date"] {
+    background-color: #d4eef2 !important;
+
+    &::-webkit-calendar-picker-indicator {
+      filter: invert(0.5) sepia(1) saturate(3) hue-rotate(160deg);
+      cursor: pointer;
+    }
+  }
+}
+
+/* Apply to specific patient pages */
+.patient-page,
+.study-patient-page,
+[class*="patient"] {
+
+  .filter,
+  .filter_block,
+  form {
+    background: linear-gradient(135deg, #e8f5f7 0%, #d4eef2 100%);
+
+    input,
+    select,
+    .mat-form-field {
+      background-color: #d4eef2 !important;
+      border: 1px solid #b8dfe5 !important;
+      border-radius: 6px !important;
+
+      &:focus {
+        background-color: #c5e9ef !important;
+        border-color: #17a2b8 !important;
+      }
+    }
+
+    button.submit,
+    button[type="submit"] {
+      background-color: #17a2b8 !important;
+      color: white !important;
+
+      &:hover {
+        background-color: #138496 !important;
+      }
+    }
+  }
+}

@@ -19,16 +19,7 @@
           "options": {
             "preserveSymlinks": true,
             "localize": [
-              "de",
-              "es",
-              "fr",
-              "hi",
-              "ja",
-              "mr",
-              "pt",
-              "it",
-              "ru",
-              "zh"
+              "en"
             ],
             "allowedCommonJsDependencies": [
               "lodash",
@@ -397,7 +388,7 @@
             ],
             "webWorkerTsConfig": "tsconfig.worker.json",
             "extractLicenses": false,
-            "sourceMap": true,
+            "sourceMap": false,
             "optimization": false,
             "namedChunks": false,
             "browser": "src/main.ts"
