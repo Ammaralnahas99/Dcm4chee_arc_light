@@ -1,20 +1,20 @@
-import {Component, Input, ViewEncapsulation} from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 //import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
-import {Globalvar} from '../../../constants/globalvar';
+import { Globalvar } from '../../../constants/globalvar';
 declare var DCM4CHE: any;
 import * as _ from 'lodash-es';
-import {AppService} from '../../../app.service';
-import {SearchPipe} from '../../../pipes/search.pipe';
-import {WindowRefService} from "../../../helpers/window-ref.service";
-import {j4care} from "../../../helpers/j4care.service";
-import {MatDialogContent, MatDialogRef} from '@angular/material/dialog';
-import {EditPatientService} from "./edit-patient.service";
-import {CommonModule, NgClass} from '@angular/common';
-import {FormGeneratorComponent} from '../../../helpers/form-generator/form-generator.component';
-import {IodFormGeneratorComponent} from '../../../helpers/iod-form-generator/iod-form-generator.component';
-import {FormsModule} from '@angular/forms';
-import {DcmDropDownComponent} from '../../dcm-drop-down/dcm-drop-down.component';
-import {SelectDropdown} from '../../../interfaces';
+import { AppService } from '../../../app.service';
+import { SearchPipe } from '../../../pipes/search.pipe';
+import { WindowRefService } from "../../../helpers/window-ref.service";
+import { j4care } from "../../../helpers/j4care.service";
+import { MatDialogContent, MatDialogRef } from '@angular/material/dialog';
+import { EditPatientService } from "./edit-patient.service";
+import { CommonModule, NgClass } from '@angular/common';
+import { FormGeneratorComponent } from '../../../helpers/form-generator/form-generator.component';
+import { IodFormGeneratorComponent } from '../../../helpers/iod-form-generator/iod-form-generator.component';
+import { FormsModule } from '@angular/forms';
+import { DcmDropDownComponent } from '../../dcm-drop-down/dcm-drop-down.component';
+import { SelectDropdown } from '../../../interfaces';
 
 @Component({
     selector: 'app-edit-patient',
@@ -36,7 +36,7 @@ import {SelectDropdown} from '../../../interfaces';
 export class EditPatientComponent {
 
 
-    formMode= localStorage.getItem('patient_edit_mode') || "complex";
+    formMode = localStorage.getItem('patient_edit_mode') || "complex";
     opendropdown = false;
     addPatientAttribut = '';
     lastPressedCode;
@@ -50,35 +50,36 @@ export class EditPatientComponent {
     private _patientkey: any;
     private _externalInternalAetMode;
     private _iod: any;
-    reasonForModification:SelectDropdown<any>[] = [
+    reasonForModification: SelectDropdown<any>[] = [
         new SelectDropdown("COERCE", "COERCE"),
         new SelectDropdown("CORRECT", "CORRECT"),
     ]
-    updatePolicy:SelectDropdown<any>[] = [
+    updatePolicy: SelectDropdown<any>[] = [
         new SelectDropdown("SUPPLEMENT", "SUPPLEMENT"),
         new SelectDropdown("MERGE", "MERGE"),
         new SelectDropdown("OVERWRITE", "OVERWRITE"),
     ]
     @Input()
-    hideAdditionalParams:boolean;
+    hideAdditionalParams: boolean;
     simpleForm = {
-        schema:undefined,
-        model:{}
+        schema: undefined,
+        model: {}
     }
-    patientResults:any = {
-        patient:undefined,
-        reasonForModificationResult:undefined,
-        sourceOfPrevVals:undefined
+    patientResults: any = {
+        patient: undefined,
+        reasonForModificationResult: undefined,
+        sourceOfPrevVals: undefined,
+        hospitalName: undefined
     }
     constructor(
         public dialogRef: MatDialogRef<EditPatientComponent>,
         public mainservice: AppService,
-        private service:EditPatientService
+        private service: EditPatientService
     ) {
-        setTimeout(()=>{
+        setTimeout(() => {
             this.simpleForm.schema = this.service.getSimpleFormSchema();
             this.formMode = localStorage.getItem('patient_edit_mode') || "simple";
-        },10)
+        }, 10)
     }
     onChange(newValue, model) {
         _.set(this, model, newValue);
@@ -148,91 +149,91 @@ export class EditPatientComponent {
         this._externalInternalAetMode = value;
     }
 
-    dialogKeyHandler(e, dialogRef){
+    dialogKeyHandler(e, dialogRef) {
         let code = (e.keyCode ? e.keyCode : e.which);
         console.log('in dialogkeyhandler', code);
-        if (code === 13){
+        if (code === 13) {
             dialogRef.close(this._patient);
         }
-        if (code === 27){
-            if (this.opendropdown){
+        if (code === 27) {
+            if (this.opendropdown) {
                 this.opendropdown = false;
-            }else{
+            } else {
                 dialogRef.close(null);
             }
         }
     }
-    getKeys(obj){
-        if (_.isArray(obj)){
+    getKeys(obj) {
+        if (_.isArray(obj)) {
             return obj;
-        }else{
+        } else {
             return Object.keys(obj);
         }
     }
-    checkClick(e){
+    checkClick(e) {
         console.log('e', e);
         let code = (e.keyCode ? e.keyCode : e.which);
         console.log('code in checkclick');
-        if (!(e.target.id === 'dropdown' || e.target.id === 'addPatientAttribut')){
+        if (!(e.target.id === 'dropdown' || e.target.id === 'addPatientAttribut')) {
             this.opendropdown = false;
         }
     }
-    pressedKey(e){
+    pressedKey(e) {
         this.opendropdown = true;
         let code = (e.keyCode ? e.keyCode : e.which);
         console.log('in pressedkey', code);
         this.lastPressedCode = code;
         //Tab clicked
-        if (code === 9){
+        if (code === 9) {
             this.opendropdown = false;
         }
         //Enter clicked
-        if (code === 13){
+        if (code === 13) {
             // var filter = $filter("filter");
             // var filtered = filter(this.dropdown, this.addPatientAttribut);
             let filtered = new SearchPipe().transform(this.dropdown, this.addPatientAttribut);
-            if (filtered){
+            if (filtered) {
                 this.opendropdown = true;
             }
             console.log('filtered', filtered);
             let attrcode: any;
-            if (WindowRefService.nativeWindow.document.getElementsByClassName('dropdown_element selected').length > 0){
+            if (WindowRefService.nativeWindow.document.getElementsByClassName('dropdown_element selected').length > 0) {
                 attrcode = window.document.getElementsByClassName("dropdown_element selected")[0].getAttribute("name");
-            }else{
+            } else {
                 attrcode = filtered[0].code;
             }
             console.log('patient_attrs not undefined', this._patient.attrs[attrcode]);
-            if (this._patient.attrs[attrcode] != undefined){
-                if (this._iod[attrcode].multi){
+            if (this._patient.attrs[attrcode] != undefined) {
+                if (this._iod[attrcode].multi) {
                     this._patient.attrs[attrcode]['Value'].push('');
-                    this.addPatientAttribut           = '';
-                    this.opendropdown                 = false;
-                }else{
-                    this.mainservice.showWarning($localize `:@@attribute_already_exists:Attribute already exists!`);
+                    this.addPatientAttribut = '';
+                    this.opendropdown = false;
+                } else {
+                    this.mainservice.showWarning($localize`:@@attribute_already_exists:Attribute already exists!`);
                 }
-            }else{
-                this.patient.attrs[attrcode]  = this._iod[attrcode];
+            } else {
+                this.patient.attrs[attrcode] = this._iod[attrcode];
                 this.opendropdown = false;
             }
-            setTimeout(function(){
+            setTimeout(function () {
                 this.lastPressedCode = 0;
             }, 1000);
         }
         //Arrow down pressed
-        if (code === 40){
+        if (code === 40) {
             this.opendropdown = true;
             let i = 0;
-            while(i < this.dropdown.length){
-                if(this.dropdown[i].selected){
+            while (i < this.dropdown.length) {
+                if (this.dropdown[i].selected) {
                     this.dropdown[i].selected = false;
-                    if(i === this.dropdown.length-1){
+                    if (i === this.dropdown.length - 1) {
                         this.dropdown[0].selected = true;
-                    }else{
-                        this.dropdown[i+1].selected = true;
+                    } else {
+                        this.dropdown[i + 1].selected = true;
                     }
                     i = this.dropdown.length;
-                }else{
-                    if(i === this.dropdown.length-1){
+                } else {
+                    if (i === this.dropdown.length - 1) {
                         this.dropdown[0].selected = true;
                     }
                     i++;
@@ -240,66 +241,66 @@ export class EditPatientComponent {
             }
             let element = WindowRefService.nativeWindow.document.getElementsByClassName('dropdown_element selected')[0];
             let dropdownElement = WindowRefService.nativeWindow.document.getElementsByClassName('dropdown')[0];
-            try{
-                setTimeout(()=>{
+            try {
+                setTimeout(() => {
                     element = WindowRefService.nativeWindow.document.getElementsByClassName('dropdown_element selected')[0];
                     dropdownElement = WindowRefService.nativeWindow.document.getElementsByClassName('dropdown')[0];
                     WindowRefService.nativeWindow.document.getElementsByClassName('dropdown_element selected')[0].scrollIntoView({
                         behavior: "smooth",
                         block: "start"
                     });
-                },10)
+                }, 10)
 
-            }catch (e) {
+            } catch (e) {
 
             }
         }
         //Arrow up pressed
-        if (code === 38){
+        if (code === 38) {
             this.opendropdown = true;
             let i = 0;
-            while(i < this.dropdown.length){
-                if(this.dropdown[i].selected){
+            while (i < this.dropdown.length) {
+                if (this.dropdown[i].selected) {
                     this.dropdown[i].selected = false;
-                    if(i === 0){
-                        this.dropdown[this.dropdown.length-1].selected = true;
-                    }else{
-                        this.dropdown[i-1].selected = true;
+                    if (i === 0) {
+                        this.dropdown[this.dropdown.length - 1].selected = true;
+                    } else {
+                        this.dropdown[i - 1].selected = true;
                     }
                     break;
-                }else{
-                    if(i === this.dropdown.length-1){
-                        this.dropdown[this.dropdown.length-1].selected = true;
+                } else {
+                    if (i === this.dropdown.length - 1) {
+                        this.dropdown[this.dropdown.length - 1].selected = true;
                     }
                 }
                 i++;
             }
             let element = WindowRefService.nativeWindow.document.getElementsByClassName('dropdown_element selected')[0];
             let dropdownElement = WindowRefService.nativeWindow.document.getElementsByClassName('dropdown')[0];
-            try{
-                setTimeout(()=>{
+            try {
+                setTimeout(() => {
                     element = WindowRefService.nativeWindow.document.getElementsByClassName('dropdown_element selected')[0];
                     dropdownElement = WindowRefService.nativeWindow.document.getElementsByClassName('dropdown')[0];
                     WindowRefService.nativeWindow.document.getElementsByClassName('dropdown_element selected')[0].scrollIntoView({
                         behavior: "smooth",
                         block: "start"
                     });
-                },10)
+                }, 10)
 
-            }catch (e) {
+            } catch (e) {
 
             }
         }
-        if (code === 27 || code === 9){
+        if (code === 27 || code === 9) {
             this.opendropdown = false;
         }
     }
-    addAttribute(attrcode, patient){
+    addAttribute(attrcode, patient) {
         try {
-            if (j4care.hasSet(patient,attrcode)) {
+            if (j4care.hasSet(patient, attrcode)) {
                 if (this._iod[attrcode].multi) {
                     if (patient[attrcode].vr === 'PN') {
-                        patient[attrcode]['Value'].push({Alphabetic: ''});
+                        patient[attrcode]['Value'].push({ Alphabetic: '' });
                     } else {
                         if (patient[attrcode].vr === 'SQ') {
                             patient[attrcode]['Value'].push(_.cloneDeep(this._iod[attrcode].Value[0]));
@@ -318,38 +319,38 @@ export class EditPatientComponent {
                 j4care.removeKeyFromObject(patient[attrcode], "required");
             }
             this.opendropdown = false;
-        }catch (e) {
+        } catch (e) {
             console.log("e", e);
         }
     };
-    removeAttr(attrcode){
+    removeAttr(attrcode) {
         switch (arguments.length) {
             case 2:
-                if (this.patient.attrs[arguments[0]].Value.length === 1){
-                    delete  this.patient.attrs[arguments[0]];
-                }else{
+                if (this.patient.attrs[arguments[0]].Value.length === 1) {
+                    delete this.patient.attrs[arguments[0]];
+                } else {
                     this.patient.attrs[arguments[0]].Value.splice(arguments[1], 1);
                 }
                 break;
             default:
-                delete  this.patient.attrs[arguments[0]];
+                delete this.patient.attrs[arguments[0]];
                 break;
         }
     };
 
     onSimpleFormChange(event: any) {
-        console.log("event",event);
-        console.log("mo",this.simpleForm.model)
+        console.log("event", event);
+        console.log("mo", this.simpleForm.model)
         return undefined;
     }
-    onSaveClick(patient){
+    onSaveClick(patient) {
         j4care.removeKeyFromObject(patient, "newBlock");
         this.dialogRef.close(patient)
     }
 
 
     changeFormMode(mode: string) {
-        localStorage.setItem('patient_edit_mode',mode);
+        localStorage.setItem('patient_edit_mode', mode);
         this.formMode = mode;
     }
 }

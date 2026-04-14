@@ -12,7 +12,7 @@
         <div class="tabs_hide_layer">
             <div class="form_content" [ngClass]="formMode">
                 <div class="simple">
-<!--                    <filter-generator
+                    <!--                    <filter-generator
                             [schema]="simpleForm.schema"
                             [filterTreeHeight]="1"
                             [model]="simpleForm.model"
@@ -20,43 +20,54 @@
                             [doNotSave]="true"
                             [onFilterChangeHook]="onSimpleFormChange"
                     ></filter-generator>-->
-                    <form-generator
-                            [schema]="simpleForm.schema"
-                            [showLabels]="true"
-                            [model]="patientResults.patient?.attrs || patient.attrs"
-                    ></form-generator>
+                    <form-generator [schema]="simpleForm.schema" [showLabels]="true"
+                        [model]="patientResults.patient?.attrs || patient.attrs"></form-generator>
                 </div>
                 <div class="complex">
-                    <input autocomplete="off" id="addPatientAttribut" class="addPatientAttribut" [(ngModel)]="addPatientAttribut" i18n-placeholder="@@placeholder.add_new_attribute" placeholder="Add new attribute"  (click)="opendropdown = !opendropdown"  (keydown)="pressedKey($event)"/>
+                    <input autocomplete="off" id="addPatientAttribut" class="addPatientAttribut"
+                        [(ngModel)]="addPatientAttribut" i18n-placeholder="@@placeholder.add_new_attribute"
+                        placeholder="Add new attribute" (click)="opendropdown = !opendropdown"
+                        (keydown)="pressedKey($event)" />
                     <div id="dropdown" class="dropdown" *ngIf="opendropdown">
-                        <a class="dropdown_element" name="{{m.code}}" *ngFor="let m of dropdown | search:addPatientAttribut"  (click)="$event.preventDefault();addAttribute(m.code, patientResults.patient?.attrs || patient.attrs)">({{m.codeComma}}) {{m.name}}</a>
+                        <a class="dropdown_element" name="{{m.code}}"
+                            *ngFor="let m of dropdown | search:addPatientAttribut"
+                            (click)="$event.preventDefault();addAttribute(m.code, patientResults.patient?.attrs || patient.attrs)">({{m.codeComma}})
+                            {{m.name}}</a>
                     </div>
                     <div mat-dialog-content>
-                        <iod-form-generator [externalInternalAetMode]="externalInternalAetMode" [object]="patient.attrs" [prefix]="" [mode]="mode" [iod]="iod" (keydown)="dialogKeyHandler($event,dialogRef)"></iod-form-generator>
+                        <iod-form-generator [externalInternalAetMode]="externalInternalAetMode" [object]="patient.attrs"
+                            [prefix]="" [mode]="mode" [iod]="iod"
+                            (keydown)="dialogKeyHandler($event,dialogRef)"></iod-form-generator>
                     </div>
                 </div>
             </div>
         </div>
         <div class="inputpart" *ngIf="!hideAdditionalParams && mode === 'edit'">
             <div class="form_input">
+                <label i18n="@@hospital_name_label">Hospital Name:</label>
+                <input type="text" [(ngModel)]="patientResults.hospitalName" i18n-placeholder="@@hospital_name"
+                    placeholder="Hospital Name">
+            </div>
+            <div class="form_input">
                 <label i18n="@@reason_for_modification_label">Reason for modification:</label>
                 <dcm-drop-down [options]="reasonForModification" [(model)]="patientResults.reasonForModificationResult"
-                               [editable]="false" [showSearchField]="false" [multiSelectMode]="false" [showStar]="false"
-                               (modelChange)="patientResults.reasonForModificationResult = $event">
+                    [editable]="false" [showSearchField]="false" [multiSelectMode]="false" [showStar]="false"
+                    (modelChange)="patientResults.reasonForModificationResult = $event">
                 </dcm-drop-down>
             </div>
             <div class="form_input">
                 <label i18n="@@source_of_prev_vals_label">Source of previous values:</label>
-                <input type="text" [(ngModel)]="patientResults.sourceOfPrevVals" i18n-placeholder="source_of_previous_values" placeholder="Source of previous values">
+                <input type="text" [(ngModel)]="patientResults.sourceOfPrevVals"
+                    i18n-placeholder="source_of_previous_values" placeholder="Source of previous values">
             </div>
         </div>
         <div class="dialogbuttons">
             @if (patientResults.patient) {
-               <button class="save" type="button" (click)="onSaveClick(patientResults)">{{saveLabel}}</button>
+            <button class="save" type="button" (click)="onSaveClick(patientResults)">{{saveLabel}}</button>
             } @else {
-                <button class="save" type="button" (click)="onSaveClick(patient)">{{saveLabel}}</button>
+            <button class="save" type="button" (click)="onSaveClick(patient)">{{saveLabel}}</button>
             }
             <button class="cancle" type="button" (click)="dialogRef.close(null)" i18n="@@CANCEL">CANCEL</button>
         </div>
-        </div>
+    </div>
 </div>

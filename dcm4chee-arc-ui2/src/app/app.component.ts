@@ -1,34 +1,34 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
-import {MessagingComponent} from './widgets/messaging/messaging.component';
-import {AppService} from './app.service';
-import {ViewChild} from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { MessagingComponent } from './widgets/messaging/messaging.component';
+import { AppService } from './app.service';
+import { ViewChild } from '@angular/core';
 
 
-import {ProductLabellingComponent} from './widgets/dialogs/product-labelling/product-labelling.component';
-import {HostListener} from '@angular/core';
-import {WindowRefService} from './helpers/window-ref.service';
+import { ProductLabellingComponent } from './widgets/dialogs/product-labelling/product-labelling.component';
+import { HostListener } from '@angular/core';
+import { WindowRefService } from './helpers/window-ref.service';
 import * as _ from 'lodash-es';
-import {J4careHttpService} from './helpers/j4care-http.service';
-import {j4care} from './helpers/j4care.service';
-import {PermissionService} from './helpers/permissions/permission.service';
-import {Observable} from '../../node_modules/rxjs';
-import {HttpClient} from '@angular/common/http';
-import {DcmWebApp} from './models/dcm-web-app';
-import {KeycloakService} from './helpers/keycloak-service/keycloak.service';
-import {Globalvar} from './constants/globalvar';
-import {KeycloakHttpClient} from './helpers/keycloak-service/keycloak-http-client.service';
-import {User} from './models/user';
-import {LanguageSwitcher} from './models/language-switcher';
-import {HttpErrorHandler} from './helpers/http-error-handler';
-import {ConfiguredDateTameFormatObject, LanguageObject, LanguageProfile, LocalLanguageObject} from './interfaces';
-import {AppRequestsService} from './app-requests.service';
-import {Title} from '@angular/platform-browser';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {KeycloakHelperService} from './helpers/keycloak-service/keycloak-helper.service';
+import { J4careHttpService } from './helpers/j4care-http.service';
+import { j4care } from './helpers/j4care.service';
+import { PermissionService } from './helpers/permissions/permission.service';
+import { Observable } from '../../node_modules/rxjs';
+import { HttpClient } from '@angular/common/http';
+import { DcmWebApp } from './models/dcm-web-app';
+import { KeycloakService } from './helpers/keycloak-service/keycloak.service';
+import { Globalvar } from './constants/globalvar';
+import { KeycloakHttpClient } from './helpers/keycloak-service/keycloak-http-client.service';
+import { User } from './models/user';
+import { LanguageSwitcher } from './models/language-switcher';
+import { HttpErrorHandler } from './helpers/http-error-handler';
+import { ConfiguredDateTameFormatObject, LanguageObject, LanguageProfile, LocalLanguageObject } from './interfaces';
+import { AppRequestsService } from './app-requests.service';
+import { Title } from '@angular/platform-browser';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { KeycloakHelperService } from './helpers/keycloak-service/keycloak-helper.service';
 
 declare var DCM4CHE: any;
 declare var Keycloak: any;
-const worker = new Worker(new URL('./server-time.worker', import.meta.url), {type: 'module', name: 'server-time'});
+const worker = new Worker(new URL('./server-time.worker', import.meta.url), { type: 'module', name: 'server-time' });
 
 @Component({
     selector: 'app-root',
@@ -51,11 +51,13 @@ export class AppComponent implements OnInit {
     authServerUrl;
     showMenu = false;
     showScrollButton = false;
+    navigationOpen = false;
+    configurationOpen = false;
     currentServerTime;
     currentClockTime;
     clockInterval;
     j4care = j4care;
-    @ViewChild(MessagingComponent, {static: true}) msg;
+    @ViewChild(MessagingComponent, { static: true }) msg;
     clockUnExtended = true;
     myDeviceName = '';
     timeZone;
@@ -264,7 +266,7 @@ export class AppComponent implements OnInit {
 
     startTime() {
         if (typeof Worker !== 'undefined') {
-            worker.onmessage = ({data}) => {
+            worker.onmessage = ({ data }) => {
                 try {
                     this.currentServerTime = new Date(data.serverTime);
                     this.mainservice.serverTime = this.currentServerTime;
@@ -303,7 +305,7 @@ export class AppComponent implements OnInit {
     switchLanguage(language: LanguageObject) {
         let saveAndRedirect = function () {
             localStorage.setItem('current_language', language.code);
-            window.location.replace(window.location.origin +  window.location.pathname.replace(/\/ui2\/\w{2}/,`/ui2/${language.code}`))
+            window.location.replace(window.location.origin + window.location.pathname.replace(/\/ui2\/\w{2}/, `/ui2/${language.code}`))
         }
         if (!this.mainservice.global.notSecure) {
             this.keycloakHelperService.changeLanguageToUserProfile(language.code).subscribe(res => {

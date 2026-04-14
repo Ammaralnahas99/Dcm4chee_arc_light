@@ -183,6 +183,9 @@ public class PamRS {
     @QueryParam("sourceOfPreviousValues")
     private String sourceOfPreviousValues;
 
+    @QueryParam("hospitalName")
+    private String hospitalName;
+
     @Override
     public String toString() {
         String requestURI = request.getRequestURI();
@@ -430,11 +433,13 @@ public class PamRS {
         String msgType = CREATE_PATIENT_MSG_TYPE;
         try {
             if (patientMatch) {
-                patientService.updatePatient(ctx);
+                Patient updatedPatient = patientService.updatePatient(ctx);
                 if (ctx.getEventActionCode().equals(AuditMessages.EventActionCode.Update)) {
                     rsOp = ctx.getPrevPatPk() != 0L ? RSOperation.UpdatePatientByPID : RSOperation.UpdatePatient;
                     msgType = UPDATE_PATIENT_MSG_TYPE;
                 }
+                if (hospitalName != null && !hospitalName.isEmpty() && updatedPatient != null)
+                    updatedPatient.setHospitalName(hospitalName);
             } else {
                 ctx.setPreviousPatientIDs(trustedPriorPatientIDs);
                 if (mergePatients) {

@@ -178,6 +178,10 @@ public class Patient {
     @Column(name = "pat_custom3")
     private String patientCustomAttribute3;
 
+    @Basic(optional = true)
+    @Column(name = "hospital_name")
+    private String hospitalName;
+
     @Basic(optional = false)
     @Column(name = "num_studies")
     private int numberOfStudies;
@@ -321,6 +325,14 @@ public class Patient {
 
     public String getPatientCustomAttribute3() {
         return patientCustomAttribute3;
+    }
+
+    public String getHospitalName() {
+     return hospitalName;
+    }
+
+    public void setHospitalName(String hospitalName) {
+      this.hospitalName = hospitalName;
     }
 
     public int getNumberOfStudies() {

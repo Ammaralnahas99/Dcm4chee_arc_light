@@ -86,6 +86,7 @@ public class QueryParam {
     private long maxStudySize;
     private boolean withoutIssuer;
     private String requested;
+    private String hospitalName;
     private SPSStatus[] hideSPSWithStatusFromMWL = {};
     private Code scheduledStationNameCode;
 
@@ -371,5 +372,13 @@ public class QueryParam {
 
     public void setRequested(String requested) {
         this.requested = requested;
+    }
+
+    public String getHospitalName() {
+        return hospitalName;
+    }
+
+    public void setHospitalName(String hospitalName) {
+        this.hospitalName = hospitalName;
     }
 }

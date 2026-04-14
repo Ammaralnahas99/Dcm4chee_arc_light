@@ -638,6 +638,8 @@ public class QueryBuilder {
                 AttributeFilter.selectStringValue(keys, attrFilter.getCustomAttribute3(), "*"), true);
         if (queryParam.getPatientVerificationStatus() != null)
             predicates.add(cb.equal(patient.get(Patient_.verificationStatus), queryParam.getPatientVerificationStatus()));
+        if (queryParam.getHospitalName() != null && !queryParam.getHospitalName().isEmpty())
+            wildCard(predicates, patient.get(Patient_.hospitalName), queryParam.getHospitalName(), true);
     }
 
     private <Z> Predicate onlyWithStudiesPredicate(CommonAbstractCriteria criteria, From<Z, Patient> patient, QueryParam queryParam) {

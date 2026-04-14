@@ -177,6 +177,9 @@ public class QidoRS {
     @Pattern(regexp = "true|false")
     private String merged;
 
+    @QueryParam("hospitalName")
+    private String hospitalName;
+
     @QueryParam("accept")
     private List<String> accept;
 
@@ -686,6 +689,8 @@ public class QidoRS {
             queryParam.setPatientVerificationStatus(Patient.VerificationStatus.valueOf(patientVerificationStatus));
         if (expirationState != null)
             queryParam.setExpirationState(ExpirationState.valueOf(expirationState));
+        if (hospitalName != null && !hospitalName.isEmpty())
+            queryParam.setHospitalName(hospitalName);
         QueryContext ctx = service.newQueryContextQIDO(
                 HttpServletRequestInfo.valueOf(request), method, aet, ae, queryParam);
         ctx.setQueryRetrieveLevel(model.getQueryRetrieveLevel());
