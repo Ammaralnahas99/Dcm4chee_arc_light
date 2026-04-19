@@ -116,6 +116,7 @@ export class EditPatientComponent {
 
     set patient(value: any) {
         this._patient = value;
+        this.patientResults.patient = value;
     }
 
     get patientkey(): any {
@@ -345,6 +346,10 @@ export class EditPatientComponent {
     }
     onSaveClick(patient) {
         j4care.removeKeyFromObject(patient, "newBlock");
+        if (patient.patient) {
+            // If it's patientResults object with additional params
+            j4care.removeKeyFromObject(patient.patient, "newBlock");
+        }
         this.dialogRef.close(patient)
     }
 

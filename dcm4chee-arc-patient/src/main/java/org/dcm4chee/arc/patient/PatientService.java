@@ -128,4 +128,6 @@ public interface PatientService {
                                Set<IDWithIssuer> success, Map<IDWithIssuer, Long> ambiguous, AttributesFormat issuer);
 
     <T> List<T> queryWithOffsetAndLimit(CriteriaQuery<T> query, int offset, int limit);
+
+    void updatePatientHospitalName(Patient patient, String hospitalName);
 }

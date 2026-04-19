@@ -54,6 +54,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.wildfly.security</groupId>
+      <artifactId>wildfly-elytron-http-oidc</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.dcm4che.dcm4chee-arc</groupId>
       <artifactId>dcm4chee-arc-conf-rs</artifactId>
       <version>${project.version}</version>

@@ -81,6 +81,26 @@
     <li (click)="showMenu = false;" [permission]="{id:'menu-monitoring',param:'visible'}"><a
             routerLink="monitoring/associations" routerLinkActive="active" i18n="@@menu.monitoring">Monitoring</a></li>
 
+    <!-- Dashboard -->
+    <li (click)="showMenu = false;"><a routerLink="dashboard" routerLinkActive="active">
+            <i class="material-icons">dashboard</i>
+            <span>All Hospitals Dashboard</span>
+        </a></li>
+
+    <!-- Hospital Dashboards Dropdown -->
+    <li class="dropdown-menu-item" *ngIf="hospitalList && hospitalList.length > 0">
+        <a (click)="hospitalMenuOpen = !hospitalMenuOpen" class="dropdown-toggle">
+            <i class="material-icons">local_hospital</i>
+            <span>Hospital Dashboards</span>
+            <i class="material-icons chevron">{{hospitalMenuOpen ? 'expand_less' : 'expand_more'}}</i>
+        </a>
+        <ul class="submenu" *ngIf="hospitalMenuOpen">
+            <li (click)="showMenu = false;" *ngFor="let hospital of hospitalList">
+                <a [routerLink]="['/dashboard', hospital]" routerLinkActive="active">{{ hospital }}</a>
+            </li>
+        </ul>
+    </li>
+
     <!-- Navigation Dropdown -->
     <li [permission]="{id:'menu-study',param:'visible'}" class="dropdown-menu-item">
         <a (click)="navigationOpen = !navigationOpen" class="dropdown-toggle">
@@ -93,6 +113,16 @@
                     i18n="@@patients">Patient</a></li>
             <li (click)="showMenu = false;"><a routerLink="study/study" routerLinkActive="active"
                     i18n="@@studies">Studies</a></li>
+            <li (click)="showMenu = false;"><a routerLink="study/series" routerLinkActive="active"
+                    i18n="@@series">Series</a></li>
+            <li (click)="showMenu = false;"><a routerLink="study/mwl" routerLinkActive="active" i18n="@@mwl">MWL</a>
+            </li>
+            <li (click)="showMenu = false;"><a routerLink="study/mpps" routerLinkActive="active" i18n="@@mpps">MPPS</a>
+            </li>
+            <li (click)="showMenu = false;"><a routerLink="study/uwl" routerLinkActive="active" i18n="@@work_items">Work
+                    Items</a></li>
+            <li (click)="showMenu = false;"><a routerLink="study/diff" routerLinkActive="active"
+                    i18n="@@navigation.tab.diffs">Compare</a></li>
         </ul>
     </li>
 
@@ -115,4 +145,3 @@
 <div class="scroll_up glyphicon glyphicon-menu-up animated" *ngIf="showScrollButton"
     [ngClass]="{fadeIn:showScrollButton, fadeOut:!showScrollButton}" (click)="scrollUp()">
 </div>
-<link rel="stylesheet" href="/resources/css/style.css">

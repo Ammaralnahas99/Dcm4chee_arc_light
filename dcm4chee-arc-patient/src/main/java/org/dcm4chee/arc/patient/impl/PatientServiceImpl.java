@@ -363,4 +363,9 @@ public class PatientServiceImpl implements PatientService {
                                       Map<IDWithIssuer, Long> ambiguous, AttributesFormat issuer) {
         ejb.testSupplementIssuers(query, fetchSize, success, ambiguous, issuer);
     }
+
+    @Override
+    public void updatePatientHospitalName(Patient patient, String hospitalName) {
+        ejb.updatePatientHospitalName(patient, hospitalName);
+    }
 }

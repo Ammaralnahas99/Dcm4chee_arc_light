@@ -53,6 +53,8 @@ export class AppComponent implements OnInit {
     showScrollButton = false;
     navigationOpen = false;
     configurationOpen = false;
+    hospitalMenuOpen = false;
+    hospitalList: string[] = [];
     currentServerTime;
     currentClockTime;
     clockInterval;
@@ -247,6 +249,7 @@ export class AppComponent implements OnInit {
             return `${this.getFullYear()}${j4care.getSingleDateTimeValueFromInt(this.getMonth() + 1)}${j4care.getSingleDateTimeValueFromInt(this.getDate())}${j4care.getSingleDateTimeValueFromInt(this.getHours())}${j4care.getSingleDateTimeValueFromInt(this.getMinutes())}${j4care.getSingleDateTimeValueFromInt(this.getSeconds())}`;
         };
         this.initGetDevicename(2);
+        this.loadHospitalList();
         /*        this.setServerTime(()=>{
                 });*/
 
@@ -260,6 +263,19 @@ export class AppComponent implements OnInit {
                         idle: document.hidden
                     });
                 }
+            }
+        });
+    }
+
+    loadHospitalList() {
+        const url = `/dcm4chee-arc/aets/${this.mainservice.archiveDeviceName || 'DCM4CHEE'}/rs/hospitals/list`;
+        this.appRequests.getJSON(url).subscribe({
+            next: (hospitals: string[]) => {
+                this.hospitalList = hospitals || [];
+            },
+            error: (err) => {
+                console.error('Error loading hospital list:', err);
+                this.hospitalList = [];
             }
         });
     }

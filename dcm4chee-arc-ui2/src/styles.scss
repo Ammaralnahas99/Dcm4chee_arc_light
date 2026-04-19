@@ -1546,7 +1546,7 @@ mat-grid-list {
   li {
     a {
       &.active {
-        background: var(--backgroundColor);
+        background: rgba(0, 123, 255, 0.2);
       }
     }
   }
@@ -1561,15 +1561,22 @@ mat-grid-list {
       justify-content: space-between;
       cursor: pointer;
       padding: 10px 15px;
+      color: #000000;
 
       i.material-icons:first-child {
         margin-right: 10px;
         font-size: 20px;
+        color: #007bff;
+      }
+
+      span {
+        color: #000000;
       }
 
       .chevron {
         margin-left: auto;
         font-size: 20px;
+        color: #007bff;
       }
     }
 
@@ -1577,7 +1584,7 @@ mat-grid-list {
       list-style: none;
       padding: 0;
       margin: 0;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 123, 255, 0.05);
 
       li {
         border-top: none;
@@ -1587,13 +1594,14 @@ mat-grid-list {
           padding: 10px 15px 10px 45px;
           display: block;
           font-size: 14px;
+          color: #007bff;
 
           &:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 123, 255, 0.1);
           }
 
           &.active {
-            background: rgba(32, 46, 58, 0.45);
+            background: rgba(0, 123, 255, 0.2);
             font-weight: bold;
           }
         }

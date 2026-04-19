@@ -896,4 +896,11 @@ public class PatientServiceEJB {
         }
         return false;
     }
+
+    public void updatePatientHospitalName(Patient patient, String hospitalName) {
+        if (patient != null && hospitalName != null && !hospitalName.isEmpty()) {
+            patient.setHospitalName(hospitalName);
+            em.merge(patient);
+        }
+    }
 }

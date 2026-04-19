@@ -181,6 +181,7 @@ public class QueryAttributes {
                 case "test":
                 case "requested":
                 case "merged":
+                case "hospitalName":
                 case "ExporterID":
                 case "FreezeExpirationDate":
                 case "allmodified":

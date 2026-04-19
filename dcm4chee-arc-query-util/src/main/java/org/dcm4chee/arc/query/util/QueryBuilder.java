@@ -638,8 +638,12 @@ public class QueryBuilder {
                 AttributeFilter.selectStringValue(keys, attrFilter.getCustomAttribute3(), "*"), true);
         if (queryParam.getPatientVerificationStatus() != null)
             predicates.add(cb.equal(patient.get(Patient_.verificationStatus), queryParam.getPatientVerificationStatus()));
-        if (queryParam.getHospitalName() != null && !queryParam.getHospitalName().isEmpty())
-            wildCard(predicates, patient.get(Patient_.hospitalName), queryParam.getHospitalName(), true);
+        if (queryParam.getHospitalName() != null && !queryParam.getHospitalName().isEmpty()) {
+            List<Predicate> hospitalNamePredicates = new ArrayList<>();
+            wildCard(hospitalNamePredicates, patient.get(Patient_.hospitalName), queryParam.getHospitalName(), true);
+            if (!hospitalNamePredicates.isEmpty())
+                predicates.add(hospitalNamePredicates.get(0));
+        }
     }
 
     private <Z> Predicate onlyWithStudiesPredicate(CommonAbstractCriteria criteria, From<Z, Patient> patient, QueryParam queryParam) {
