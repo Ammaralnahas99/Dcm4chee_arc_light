@@ -77,6 +77,17 @@
     [clickOutsideExceptionClass]="'menu_button'">
     <div (click)="showMenu = false;" class="glyphicon glyphicon-align-justify toggle-button "></div>
 
+    <!-- User Info Section -->
+    <li class="user-info" *ngIf="mainservice.user && mainservice.user.user && mainservice.user.user != 'anonymous'">
+        <div class="user-profile">
+            <i class="material-icons user-icon">account_circle</i>
+            <div class="user-details">
+                <span class="user-name">{{ mainservice.user.user }}</span>
+                <span class="user-role" *ngIf="mainservice.user.realm">{{ mainservice.user.realm }}</span>
+            </div>
+        </div>
+    </li>
+
     <!-- Monitoring -->
     <li (click)="showMenu = false;" [permission]="{id:'menu-monitoring',param:'visible'}"><a
             routerLink="monitoring/associations" routerLinkActive="active" i18n="@@menu.monitoring">Monitoring</a></li>

@@ -277,7 +277,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
             },
             { path: '**', component: PageNotFoundComponent }
         ], {
-            useHash: false,
+            useHash: true,
             preloadingStrategy: NoPreloading
         }),
         WidgetsComponents,

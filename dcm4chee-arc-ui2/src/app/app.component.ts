@@ -222,7 +222,7 @@ export class AppComponent implements OnInit {
                      username:this.mainservice.user.user || ""
                  };
                  localStorage.setItem('current_language', JSON.stringify(localLanguage));
-                 window.location.href = `/dcm4chee-arc/ui2/${profileDefaultLanguageCode}/`;
+                 window.location.href = `${this.mainservice.baseUrl}ui2/${profileDefaultLanguageCode}/`;
              }
              console.log("locale")
          }catch (e) {
@@ -268,7 +268,7 @@ export class AppComponent implements OnInit {
     }
 
     loadHospitalList() {
-        const url = `/dcm4chee-arc/aets/${this.mainservice.archiveDeviceName || 'DCM4CHEE'}/rs/hospitals/list`;
+        const url = `${this.mainservice.baseUrl}aets/${this.mainservice.archiveDeviceName || 'DCM4CHEE'}/rs/hospitals/list`;
         this.appRequests.getJSON(url).subscribe({
             next: (hospitals: string[]) => {
                 this.hospitalList = hospitals || [];
@@ -533,7 +533,7 @@ export class AppComponent implements OnInit {
             this.$http.get('../auth')
                 .map(res => {
                     let resjson; try{ let pattern = new RegExp("[^:]*:\/\/[^\/]*\/auth\/");
-                    if(pattern.exec(res.url)){ WindowRefService.nativeWindow.location = "/dcm4chee-arc/ui2/";}
+                    if(pattern.exec(res.url)){ WindowRefService.nativeWindow.location = `${this.mainservice.baseUrl}ui2/`;}
                     resjson = res.json(); }catch (e){ resjson = [];} return resjson;})
                 .subscribe(
                     (response) => {
@@ -611,7 +611,7 @@ export class AppComponent implements OnInit {
                 let match;
                 if ((match = regex.exec(location.href)) !== null) {
                     if(match[1] != currentLanguage.language.code){
-                        window.location.href = `/dcm4chee-arc/ui2/${currentLanguage.language.code}/`;
+                        window.location.href = `${this.mainservice.baseUrl}ui2/${currentLanguage.language.code}/`;
                     }
                 }
             }catch (e) {}

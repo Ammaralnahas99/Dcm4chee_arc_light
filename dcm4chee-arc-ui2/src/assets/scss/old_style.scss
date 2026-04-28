@@ -11,21 +11,21 @@ body {
 
 	padding: 2px 40px;
 
-	.background {
-		//background: url("../img/bg.jpg");
-		//background: url("../img/156265438.jpg");
-		//background: url("../img/155539853.jpg");
-		background: linear-gradient(to bottom, #DBE5F1 0%, #C9D3DD 40%, #AFB8C2 100%);
-		background-repeat: no-repeat;
-		background-size: 100%;
-		display: block;
-		height: 100%;
-		left: 0;
-		position: fixed;
-		top: 0;
-		width: 100%;
-		z-index: -1;
-	}
+	// .background {
+	// 	//background: url("../img/bg.jpg");
+	// 	//background: url("../img/156265438.jpg");
+	// 	//background: url("../img/155539853.jpg");
+	// 	background: linear-gradient(to bottom, #DBE5F1 0%, #C9D3DD 40%, #AFB8C2 100%);
+	// 	background-repeat: no-repeat;
+	// 	background-size: 100%;
+	// 	display: block;
+	// 	height: 100%;
+	// 	left: 0;
+	// 	position: fixed;
+	// 	top: 0;
+	// 	width: 100%;
+	// 	z-index: -1;
+	// }
 
 	.main_content {
 		background: rgba(255, 255, 255, 0.85) none repeat scroll 0 0;
@@ -64,14 +64,17 @@ body {
 		background: transparent;
 		background-image: url("/resources/img/logo.png"), url("../img/logo.png");
 		background-repeat: no-repeat;
-		height: 42px;
+		background-size: contain;
+		background-position: center;
+		height: 80px;
 		margin-left: 10px;
 		//opacity: 0.7;
 		position: fixed;
 		right: 32px;
 		bottom: 44px;
-		width: 148px;
-		z-index: 1;
+		width: 280px;
+		z-index: 9999;
+		overflow: visible;
 
 		&:hover {
 			cursor: pointer;
@@ -93,6 +96,47 @@ ul.nav#mainmenu {
 	width: 220px;
 	z-index: 999;
 	margin: 0;
+
+	// User Info Section
+	li.user-info {
+		background: rgba(0, 0, 0, 0.1);
+		border-top: none;
+		padding: 15px 10px;
+		margin-bottom: 10px;
+
+		.user-profile {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+
+			.user-icon {
+				font-size: 40px;
+				color: #2d404f;
+			}
+
+			.user-details {
+				display: flex;
+				flex-direction: column;
+				gap: 2px;
+
+				.user-name {
+					font-weight: bold;
+					font-size: 14px;
+					color: #000;
+				}
+
+				.user-role {
+					font-size: 11px;
+					color: #555;
+					font-style: italic;
+				}
+			}
+		}
+
+		&:hover {
+			background: rgba(0, 0, 0, 0.15);
+		}
+	}
 
 	li {
 		background: transparent;

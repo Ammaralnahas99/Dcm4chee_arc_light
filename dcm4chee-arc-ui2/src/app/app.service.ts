@@ -1,35 +1,35 @@
-import {Injectable, OnInit, OnDestroy} from '@angular/core';
-import {Observable, Subject, Subscription, of, forkJoin} from 'rxjs';
-import {User} from './models/user';
+import { Injectable, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subject, Subscription, of, forkJoin } from 'rxjs';
+import { User } from './models/user';
 import * as _ from 'lodash-es';
-import {WindowRefService} from "./helpers/window-ref.service";
-import {DatePipe} from "@angular/common";
+import { WindowRefService } from "./helpers/window-ref.service";
+import { DatePipe } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import {j4care} from "./helpers/j4care.service";
-import {DcmWebApp} from "./models/dcm-web-app";
-import {Error} from "tslint/lib/error";
-import {first, map, combineLatest, switchMap} from "rxjs/operators";
+import { j4care } from "./helpers/j4care.service";
+import { DcmWebApp } from "./models/dcm-web-app";
+import { Error } from "tslint/lib/error";
+import { first, map, combineLatest, switchMap } from "rxjs/operators";
 import { loadTranslations } from '@angular/localize';
-import {ConfiguredDateTameFormatObject, DateTimeFormatMode, TimeRange} from "./interfaces";
-import {environment} from "../environments/environment";
-import {AppRequestsService} from "./app-requests.service";
+import { ConfiguredDateTameFormatObject, DateTimeFormatMode, TimeRange } from "./interfaces";
+import { environment } from "../environments/environment";
+import { AppRequestsService } from "./app-requests.service";
 
 @Injectable()
-export class AppService implements OnInit, OnDestroy{
+export class AppService implements OnInit, OnDestroy {
 
     private _user: User;
     private userSubject = new Subject<User>();
     private secured = new Subject<boolean>();
     private serverTimeSubject = new Subject<Date>();
-    private securedValue:boolean;
+    private securedValue: boolean;
     private _global;
-    private _baseUrl:string = '/dcm4chee-arc/';
+    private _baseUrl: string = '/dcm4chee-arc/';
     extensionsMap;
     subscription: Subscription;
     keycloak;
     private _dcm4cheeArcConfig;
     constructor(
-        public $httpClient:HttpClient
+        public $httpClient: HttpClient
     ) {
         this.subscription = this.globalSet$.subscribe(obj => {
             this._global = obj;
@@ -42,7 +42,7 @@ export class AppService implements OnInit, OnDestroy{
         return this._global;
     }
 
-    private _serverTime:Date;
+    private _serverTime: Date;
 
     get serverTime(): Date {
         return this._serverTime;
@@ -67,27 +67,27 @@ export class AppService implements OnInit, OnDestroy{
         this._global = value;
     }
 
-    setUser(user:User){
+    setUser(user: User) {
         this._user = user;
         this.userSubject.next(user);
     }
-    getUser():Observable<User>{
-        if(this._user){
+    getUser(): Observable<User> {
+        if (this._user) {
             return of(this._user);
-        }else{
+        } else {
             return this.userSubject.asObservable();
         }
     }
 
-    isSecure(){
-        if(typeof this.securedValue === "boolean"){
+    isSecure() {
+        if (typeof this.securedValue === "boolean") {
             return of(this.securedValue);
-        }else{
+        } else {
             return this.secured.asObservable();
         }
     }
 
-    setSecured(state:boolean){
+    setSecured(state: boolean) {
         this.securedValue = state;
         this.secured.next(state);
     }
@@ -99,21 +99,21 @@ export class AppService implements OnInit, OnDestroy{
         this._dcm4cheeArcConfig = value;
     }
 
-    private _isRole = function(role){
-        if (this.user){
-            if (this.user.user === null && this.user.roles.length === 0){
+    private _isRole = function (role) {
+        if (this.user) {
+            if (this.user.user === null && this.user.roles.length === 0) {
                 return true;
-            }else{
-                if (this.user.roles && this.user.roles.indexOf(role) > -1){
+            } else {
+                if (this.user.roles && this.user.roles.indexOf(role) > -1) {
                     return true;
-                }else{
+                } else {
                     return false;
                 }
             }
-        }else{
-            if (role === 'admin'){
+        } else {
+            if (role === 'admin') {
                 return false;
-            }else{
+            } else {
                 return true;
             }
         }
@@ -133,10 +133,10 @@ export class AppService implements OnInit, OnDestroy{
 
     set archiveDevice(value) {
         this._archiveDevice = value;
-        if(!this._deviceName && _.hasIn(value,"dicomDeviceName")){
+        if (!this._deviceName && _.hasIn(value, "dicomDeviceName")) {
             this._deviceName = value.dicomDeviceName;
         }
-        if(!this._archiveDeviceName && _.hasIn(value,"dicomDeviceName")){
+        if (!this._archiveDeviceName && _.hasIn(value, "dicomDeviceName")) {
             this._archiveDeviceName = value.dicomDeviceName;
         }
     }
@@ -148,7 +148,7 @@ export class AppService implements OnInit, OnDestroy{
         this._archiveDeviceName = value;
     }
 
-// Observable string sources
+    // Observable string sources
     private setMessageSource = new Subject<any>();
     private setGlobalSource = new Subject<string>();
     private createPatientSource = new Subject<string>();
@@ -162,42 +162,42 @@ export class AppService implements OnInit, OnDestroy{
         console.log('in set message', msg);
         this.setMessageSource.next(msg);
     }
-    showError(msg:string){
+    showError(msg: string) {
         this.setMessageSource.next({
-            "title":$localize `:@@error:Error`,
-            "text":msg,
-            "status":"error"
+            "title": $localize`:@@error:Error`,
+            "text": msg,
+            "status": "error"
         })
     }
-    showMsg(msg:string){
+    showMsg(msg: string) {
         this.setMessageSource.next({
-            "title":$localize `:@@info:Info`,
-            "text":msg,
-            "status":"info"
-        })
-    }
-
-    showMsgUpdateMatchingMWLs(res, msg:string){
-        this.setMessageSource.next({
-            "title":$localize `:@@info:Info`,
-            "text":_.get(res, "count") + ' ' + msg,
-            "status":"info"
+            "title": $localize`:@@info:Info`,
+            "text": msg,
+            "status": "info"
         })
     }
 
-    showMsgCopyMoveLink(res, action:string) {
+    showMsgUpdateMatchingMWLs(res, msg: string) {
+        this.setMessageSource.next({
+            "title": $localize`:@@info:Info`,
+            "text": _.get(res, "count") + ' ' + msg,
+            "status": "info"
+        })
+    }
+
+    showMsgCopyMoveLink(res, action: string) {
         let msg;
-        const errorCount = res.filter(result=>result.isError).length;
+        const errorCount = res.filter(result => result.isError).length;
         let errorDetail = _.hasIn(res, "0.error.error.errorMessage") ? _.get(res, "0.error.error.errorMessage") : '';
-        if(errorCount === res.length){
-            msg = $localize `:@@study.process_executed_all_failed_detail:${action}:action: process executed - all failed:<br>\nErrors: ${errorCount}:error:`;
+        if (errorCount === res.length) {
+            msg = $localize`:@@study.process_executed_all_failed_detail:${action}:action: process executed - all failed:<br>\nErrors: ${errorCount}:error:`;
             errorDetail = msg + `<br>\n` + errorDetail;
             this.showError(errorDetail);
         } else {
-            msg = $localize `:@@study.process_executed_successfully_detailed:${action}:action: process executed successfully:<br>\nErrors: ${errorCount}:error:<br>\nSuccessful: ${res.length - errorCount}:successfull:`;
-            if(errorCount > 0){
+            msg = $localize`:@@study.process_executed_successfully_detailed:${action}:action: process executed successfully:<br>\nErrors: ${errorCount}:error:<br>\nSuccessful: ${res.length - errorCount}:successfull:`;
+            if (errorCount > 0) {
                 this.showWarning(msg);
-            }else{
+            } else {
                 this.showMsg(msg);
             }
         }
@@ -213,11 +213,11 @@ export class AppService implements OnInit, OnDestroy{
             else
                 detail += `Deleted ` + successful + ` tasks successfully<br>\n`;
         }
-        if (failures  != '') {
+        if (failures != '') {
             detail += `Failed to delete ` + failures + ` tasks<br>\n`;
         }
 
-        if (failures  != '') {
+        if (failures != '') {
             if (successful != '')
                 this.showWarning(detail);
             else
@@ -232,13 +232,13 @@ export class AppService implements OnInit, OnDestroy{
         let failures = _.hasIn(res, "failures") ? _.get(res, "failures") : '';
         if (successful != '' || successful == 0)
             detail = detail + `updated: ` + successful + `<br>\n`;
-        if (failures  != '') {
+        if (failures != '') {
             detail = detail + `failures: ` + `<br>\n`;
             _.forEach(failures, (s) => {
                 detail += s + `<br>\n`;
             })
         }
-        if (failures  != '') {
+        if (failures != '') {
             if (successful != '')
                 this.showWarning(detail);
             else
@@ -247,7 +247,7 @@ export class AppService implements OnInit, OnDestroy{
             this.showMsg(detail);
     }
 
-    showMsgSupplementIssuer(res){
+    showMsgSupplementIssuer(res) {
         console.log(res);
         let detail = '';
         let successful = _.hasIn(res, "pids") ? _.get(res, "pids") : '';
@@ -266,7 +266,7 @@ export class AppService implements OnInit, OnDestroy{
                 detail = detail + `PID: ` + _.get(ambiguousPID, "pid") + `, Count: ` + ambiguousPID.count + `<br>\n`;
             })
         }
-        if (failures  != '') {
+        if (failures != '') {
             detail = detail + `Failures: ` + `<br>\n`;
             _.forEach(failures, (pid, errorMessage) => {
                 detail += `PID: ` + pid + `, Error: ` + errorMessage + `<br>\n`;
@@ -279,7 +279,7 @@ export class AppService implements OnInit, OnDestroy{
         if (detail == '') //no content response from server
             detail = "No matching patient identifier found for supplementing issuer";
 
-        if (failures  != '' || ambiguous != '' || tooManyDuplicates != '') {
+        if (failures != '' || ambiguous != '' || tooManyDuplicates != '') {
             if (successful != '')
                 this.showWarning(detail);
             else
@@ -288,30 +288,30 @@ export class AppService implements OnInit, OnDestroy{
             this.showMsg(detail);
     }
 
-    showWarning(msg:string){
+    showWarning(msg: string) {
         this.setMessageSource.next({
-            "title":$localize `:@@warning:Warning`,
-            "text":msg,
-            "status":"warning"
+            "title": $localize`:@@warning:Warning`,
+            "text": msg,
+            "status": "warning"
         })
     }
     setGlobal(object: any) {
         this.setGlobalSource.next(object);
     }
-    updateGlobal(key:string, object:any){
-        if (this.global && !this.global[key]){
+    updateGlobal(key: string, object: any) {
+        if (this.global && !this.global[key]) {
             let global = _.cloneDeep(this.global); //,...[{hl7:response}]];
             global[key] = object;
             this.setGlobal(global);
-        }else{
-            if (this.global && this.global[key]){
+        } else {
+            if (this.global && this.global[key]) {
                 this.global[key] = object;
-            }else{
-                this.setGlobal({[key]: object});
+            } else {
+                this.setGlobal({ [key]: object });
             }
         }
     }
-    createPatient(patient: any){
+    createPatient(patient: any) {
         this.createPatientSource.next(patient);
     }
 
@@ -338,50 +338,50 @@ export class AppService implements OnInit, OnDestroy{
         // prevent memory leak when component destroyed
         this.subscription.unsubscribe();
     }
-    param(filter){
-        try{
+    param(filter) {
+        try {
             let filterMapped = Object.keys(filter).map((key) => {
-                if(_.isArray(filter[key])){
+                if (_.isArray(filter[key])) {
                     let multiParameter = [];
-                    filter[key].forEach(p=>{
+                    filter[key].forEach(p => {
                         multiParameter.push(`${key}=${p}`);
                     });
                     return multiParameter.join("&");
                     // return key + "[]=" + filter[key].join(",");
-                }else{
-                    if (filter[key] || filter[key] === false || filter[key] === 0){
+                } else {
+                    if (filter[key] || filter[key] === false || filter[key] === 0) {
                         return key + '=' + filter[key];
                     }
                 }
             });
             let filterCleared = _.compact(filterMapped);
             return filterCleared.join('&');
-        }catch (e) {
-            j4care.log("Something went wrong on getting param",e);
+        } catch (e) {
+            j4care.log("Something went wrong on getting param", e);
             return "";
         }
     }
 
 
-    getUniqueID(){
+    getUniqueID() {
         let newDate = new Date(this._serverTime);
         return `${newDate.getFullYear().toString().substr(-2)}${newDate.getMonth()}${newDate.getDate()}${newDate.getHours()}${newDate.getMinutes()}${newDate.getSeconds()}`;
     }
 
 
 
-    getServerTime():Observable<Date>{
-        if(this._serverTime){
+    getServerTime(): Observable<Date> {
+        if (this._serverTime) {
             return of(this._serverTime);
-        }else{
-            return this.serverTimeSubject.asObservable().pipe(map(serverTime=>new Date(serverTime)),first());
+        } else {
+            return this.serverTimeSubject.asObservable().pipe(map(serverTime => new Date(serverTime)), first());
         }
     }
 
-    setTimeRange(rangeInMinuts?:number, rangeInHours?:number):Observable<TimeRange>{
-        return this.getServerTime().pipe(map((serverTime:Date)=>{
+    setTimeRange(rangeInMinuts?: number, rangeInHours?: number): Observable<TimeRange> {
+        return this.getServerTime().pipe(map((serverTime: Date) => {
             let d = new Date(serverTime);
-            if(rangeInHours){
+            if (rangeInHours) {
                 d.setHours(d.getHours() - rangeInHours);
                 return new TimeRange(d, new Date(serverTime));
             }
@@ -392,82 +392,82 @@ export class AppService implements OnInit, OnDestroy{
     }
 
 
-    getKeycloakJson(){
-        if(!this.global || !this.global.notSecure){
+    getKeycloakJson() {
+        if (!this.global || !this.global.notSecure) {
             return this.$httpClient.get("/dcm4chee-arc/ui2/rs/keycloak.json")
-                .pipe(map((res:any)=>{
-                    if(_.isEmpty(res)){
-                        console.log("ojbect is empty",res);
+                .pipe(map((res: any) => {
+                    if (_.isEmpty(res)) {
+                        console.log("ojbect is empty", res);
                         this.updateGlobal("notSecure", true);
                         return res;
-                    }else{
+                    } else {
                         this.updateGlobal("notSecure", false);
                         // this.setSecured(true);
-                        return _.mapKeys(res, (value,key:any)=>{
-                            if(key === "auth-server-url")
+                        return _.mapKeys(res, (value, key: any) => {
+                            if (key === "auth-server-url")
                                 return "url";
-                            if(key === "resource")
+                            if (key === "resource")
                                 return "clientId";
                             return key;
                         });
                     }
-                },err=>{
+                }, err => {
                     this.updateGlobal("notSecure", true);
-                    console.log("err",err);
+                    console.log("err", err);
                     this.setSecured(false);
-                    throw(err);
+                    throw (err);
                 }))
-        }else{
+        } else {
             return of({})
         }
     }
 
-/*    getDcm4cheeArc(){
-        let tempDcm4cheeArch;
-        if(this._dcm4cheeArcConfig){
-            return of(this._dcm4cheeArcConfig);
-        }else{
-/!*            return this.$httpClient.get("./rs/dcm4chee-arc").pipe(
-                map(dcm4cheeArc=>{
-                    tempDcm4cheeArch = dcm4cheeArc;
-                    if(_.hasIn(dcm4cheeArc, "dcm4chee-arc-urls[0]")){
-                        this.baseUrl = _.get(dcm4cheeArc, "dcm4chee-arc-urls[0]");
-                    }
-                    return dcm4cheeArc;
-                }),
-                switchMap(dcm4cheeArc=>{
-                    let services:Observable<any>[] = _.get(dcm4cheeArc, "dcm4chee-arc-urls").map(url=>{
-                        return this.appRequests.getDeviceNameFromURL(url);
-                    });
-                    return forkJoin(services);
-                }),
-                map(res=>{
-                    try{
-                        let deviceNameUrlMap = {};
-                        tempDcm4cheeArch["dcm4chee-arc-urls"].forEach((url,i)=>{
-                            deviceNameUrlMap[url] = res[i].dicomDeviceName;
-                            if(i > 0){
-                                tempDcm4cheeArch["hasMoreThanOneBaseUrl"] = true;
-                            }
-                        });
-                        tempDcm4cheeArch["deviceNameUrlMap"] = deviceNameUrlMap;
-
-                    }catch(e: unknown){
-
-                    }
-                    this._dcm4cheeArcConfig = tempDcm4cheeArch;
-                    return tempDcm4cheeArch;
-                })
-            );*!/
-        }
-    }*/
-
-    formatBasedOnConfig(date:Date, mode:DateTimeFormatMode):string{
-        try{
-            let dateTimeFormat:ConfiguredDateTameFormatObject;
-            if(_.hasIn(this.global,"dateTimeFormat")){
-                dateTimeFormat = _.get(this.global, "dateTimeFormat");
+    /*    getDcm4cheeArc(){
+            let tempDcm4cheeArch;
+            if(this._dcm4cheeArcConfig){
+                return of(this._dcm4cheeArcConfig);
             }else{
+    /!*            return this.$httpClient.get("./rs/dcm4chee-arc").pipe(
+                    map(dcm4cheeArc=>{
+                        tempDcm4cheeArch = dcm4cheeArc;
+                        if(_.hasIn(dcm4cheeArc, "dcm4chee-arc-urls[0]")){
+                            this.baseUrl = _.get(dcm4cheeArc, "dcm4chee-arc-urls[0]");
+                        }
+                        return dcm4cheeArc;
+                    }),
+                    switchMap(dcm4cheeArc=>{
+                        let services:Observable<any>[] = _.get(dcm4cheeArc, "dcm4chee-arc-urls").map(url=>{
+                            return this.appRequests.getDeviceNameFromURL(url);
+                        });
+                        return forkJoin(services);
+                    }),
+                    map(res=>{
+                        try{
+                            let deviceNameUrlMap = {};
+                            tempDcm4cheeArch["dcm4chee-arc-urls"].forEach((url,i)=>{
+                                deviceNameUrlMap[url] = res[i].dicomDeviceName;
+                                if(i > 0){
+                                    tempDcm4cheeArch["hasMoreThanOneBaseUrl"] = true;
+                                }
+                            });
+                            tempDcm4cheeArch["deviceNameUrlMap"] = deviceNameUrlMap;
+    
+                        }catch(e: unknown){
+    
+                        }
+                        this._dcm4cheeArcConfig = tempDcm4cheeArch;
+                        return tempDcm4cheeArch;
+                    })
+                );*!/
+            }
+        }*/
+
+    formatBasedOnConfig(date: Date, mode: DateTimeFormatMode): string {
+        try {
+            let dateTimeFormat: ConfiguredDateTameFormatObject;
+            if (_.hasIn(this.global, "dateTimeFormat")) {
+                dateTimeFormat = _.get(this.global, "dateTimeFormat");
+            } else {
                 dateTimeFormat = {
                     timeFormat: "HH:mm",
                     dateFormat: "dd.MM.yyyy",
@@ -475,16 +475,16 @@ export class AppService implements OnInit, OnDestroy{
                 }
             }
             return j4care.formatDate(date, dateTimeFormat[mode]);
-        }catch (e){
-            j4care.log("Error on formatting date based on config",e);
+        } catch (e) {
+            j4care.log("Error on formatting date based on config", e);
             return "";
         }
     }
 
-    testUrl(url){
+    testUrl(url) {
 
-        this.$httpClient.get(url).subscribe(res=>{
-            console.log("res",res);
+        this.$httpClient.get(url).subscribe(res => {
+            console.log("res", res);
         });
     }
 }

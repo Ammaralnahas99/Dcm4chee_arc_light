@@ -53,16 +53,30 @@
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>dcm4chee-arc-ui2</web-resource-name>
-      <url-pattern>/*</url-pattern>
+      <url-pattern>/en/*</url-pattern>
+      <url-pattern>/de/*</url-pattern>
+      <url-pattern>/fr/*</url-pattern>
+      <url-pattern>/ja/*</url-pattern>
+      <url-pattern>/zh/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
-      <role-name>${auth-user-role:auth}</role-name>
+      <role-name>auth</role-name>
     </auth-constraint>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>public-api</web-resource-name>
+      <url-pattern>/rs/*</url-pattern>
+      <url-pattern>/monitor/*</url-pattern>
+      <url-pattern>/keycloak.json</url-pattern>
+      <url-pattern>/dcm4chee-arc.json</url-pattern>
+    </web-resource-collection>
+    <!-- No auth-constraint means these are accessible without authentication -->
   </security-constraint>
   <login-config>
     <auth-method>OIDC</auth-method>
   </login-config>
   <security-role>
-    <role-name>${auth-user-role:auth}</role-name>
+    <role-name>auth</role-name>
   </security-role>
 </web-app>

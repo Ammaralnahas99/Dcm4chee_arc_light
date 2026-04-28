@@ -47,10 +47,11 @@ export class HospitalDashboardComponent implements OnInit {
         this.error = '';
 
         let url: string;
+        const aetTitle = this.mainservice.archiveDeviceName || 'dcm4chee-arc';
 
         if (this.specificHospital) {
             // Load specific hospital statistics
-            url = `/dcm4chee-arc/aets/${this.mainservice.archiveDeviceName || 'DCM4CHEE'}/rs/hospitals/${encodeURIComponent(this.specificHospital)}/statistics`;
+            url = `/dcm4chee-arc/aets/${aetTitle}/rs/hospitals/${encodeURIComponent(this.specificHospital)}/statistics`;
 
             this.$http.get(url).subscribe({
                 next: (data: any) => {
@@ -76,7 +77,7 @@ export class HospitalDashboardComponent implements OnInit {
             });
         } else {
             // Load all hospitals statistics
-            url = `/dcm4chee-arc/aets/${this.mainservice.archiveDeviceName || 'DCM4CHEE'}/rs/hospitals/statistics`;
+            url = `/dcm4chee-arc/aets/${aetTitle}/rs/hospitals/statistics`;
 
             this.$http.get(url).subscribe({
                 next: (data: any[]) => {
@@ -106,7 +107,8 @@ export class HospitalDashboardComponent implements OnInit {
     }
 
     loadHospitalModalities(hospital: Hospital): void {
-        const url = `/dcm4chee-arc/aets/${this.mainservice.archiveDeviceName || 'DCM4CHEE'}/rs/hospitals/${encodeURIComponent(hospital.name)}/modalities`;
+        const aetTitle = this.mainservice.archiveDeviceName || 'dcm4chee-arc';
+        const url = `/dcm4chee-arc/aets/${aetTitle}/rs/hospitals/${encodeURIComponent(hospital.name)}/modalities`;
 
         this.$http.get(url).subscribe({
             next: (modalities: string[]) => {

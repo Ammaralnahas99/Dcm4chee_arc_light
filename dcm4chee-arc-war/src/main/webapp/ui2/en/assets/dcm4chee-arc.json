@@ -1,6 +1,6 @@
 {
   "dcm4chee-arc-urls": [
-    "http://shefki-lifebook:8080/dcm4chee-arc"
+    "http://localhost:8080/dcm4chee-arc"
   ],
   "dicomDeviceName": "dcm4chee-arc",
   "super-user-role": "root",
