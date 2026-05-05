@@ -6163,7 +6163,8 @@ export class Globalvar {
             flow: 'standard',
             responseMode: 'fragment',
             checkLoginIframe: false,
-            onLoad: 'login-required'
+            onLoad: 'login-required',
+            redirectUri: window.location.origin + '/dcm4chee-arc/ui2/en/index.html'
         };
     }
 }

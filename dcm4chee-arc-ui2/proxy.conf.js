@@ -23,16 +23,16 @@ module.exports = {
   },
   /* As the schemas are not part of the same ui project and are normally copied to the UI project by `mvn install`,
    * we need to proxy them to the dcm4chee-arc-ui2 project from the running (other) UI season */
-  "/assets/schema":{
+  "/assets/schema": {
     target: "http://localhost:18080",
-        secure: false,
-      changeOrigin: true,
-      logLevel: "debug",
-      pathRewrite: { "^/assets/schema": "/dcm4chee-arc/ui2/en/assets/schema" }
+    secure: false,
+    changeOrigin: true,
+    logLevel: "debug",
+    pathRewrite: { "^/assets/schema": "/dcm4chee-arc/ui2/en/assets/schema" }
   }
 };
 
-(()=>{
+(() => {
   [
     "/configuration/*",
     "/statistics/*",
@@ -49,7 +49,7 @@ module.exports = {
     "/permission-denied",
     "/device/*",
     "/configuration/*"
-  ].forEach(path=>{
+  ].forEach(path => {
     module.exports[path] = {
       target: "http://localhost:4200",
       secure: false,

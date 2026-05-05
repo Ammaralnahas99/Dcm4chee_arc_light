@@ -4,8 +4,6 @@
   "url": "http://localhost:8843",
   "ssl-required": "none",
   "public-client": true,
-  "confidential-port": 0,
-  "enable-pkce": true,
-  "pkce-method": "S256",
-  "redirect_uri": "http://localhost:8080/dcm4chee-arc/ui2/index.html"
+  "bearer-only": true,
+  "confidential-port": 0
 }

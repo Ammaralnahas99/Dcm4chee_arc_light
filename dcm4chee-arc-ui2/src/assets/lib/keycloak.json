@@ -1,8 +1,9 @@
 {
-  "realm": "dcm4che",
-  "auth-server-url": "https://shefki-lifebook:8843/auth",
-  "ssl-required": "external",
-  "resource": "dcm4chee-arc-ui",
+  "realm": "dcm4chee",
+  "clientId": "dcm4chee-arc-ui",
+  "url": "http://localhost:8843",
+  "ssl-required": "none",
   "public-client": true,
+  "bearer-only": true,
   "confidential-port": 0
 }

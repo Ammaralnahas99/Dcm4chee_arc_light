@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {PermissionDirective} from '../helpers/permissions/permission.directive';
-import {RouterLink, RouterLinkActive} from '@angular/router';
-import {CommonModule} from '@angular/common';
+import { PermissionDirective } from '../helpers/permissions/permission.directive';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'study-tab',
@@ -52,7 +52,7 @@ import {CommonModule} from '@angular/common';
     ],
     standalone: true
 })
-export class StudyTabComponent{
+export class StudyTabComponent {
 
-  constructor() { }
+    constructor() { }
 }

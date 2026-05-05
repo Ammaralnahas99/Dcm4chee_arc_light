@@ -77,6 +77,11 @@
     [clickOutsideExceptionClass]="'menu_button'">
     <div (click)="showMenu = false;" class="glyphicon glyphicon-align-justify toggle-button "></div>
 
+    <!-- Logo Section -->
+    <li class="menu-logo">
+        <img src="assets/img/logoSide.png" alt="Logo" class="sidebar-logo">
+    </li>
+
     <!-- User Info Section -->
     <li class="user-info" *ngIf="mainservice.user && mainservice.user.user && mainservice.user.user != 'anonymous'">
         <div class="user-profile">

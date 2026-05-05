@@ -1555,6 +1555,22 @@ mat-grid-list {
     }
   }
 
+  // Logo styling
+  .menu-logo {
+    padding: 15px 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+
+    .sidebar-logo {
+      max-width: 100%;
+      height: auto;
+      max-height: 60px;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
   // Dropdown styles
   .dropdown-menu-item {
     position: relative;
@@ -6213,10 +6229,10 @@ body {
     letter-spacing: 0.5px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(23, 162, 184, 0.2);
+    box-shadow: 0 2px 4px rgba(93, 205, 223, 0.2);
 
     &:hover {
-      background-color: #138496 !important;
+      background-color: #51b7c7 !important;
       box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
       transform: translateY(-1px);
     }
@@ -6273,6 +6289,81 @@ body {
 
       &:hover {
         background-color: #138496 !important;
+      }
+    }
+  }
+}
+
+/* Patient Tab - 3 Column Grid Layout (Rows with 3 fields each) */
+filter-generator[filterid="study-filter-patient"] {
+  .filter_block {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 15px 20px !important;
+    width: 100% !important;
+
+    .line {
+      display: contents !important;
+
+      &>* {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 8px !important;
+      }
+
+      &>label {
+        text-align: left !important;
+        font-weight: 600 !important;
+        color: #2c5f6f !important;
+      }
+
+      &>input,
+      &>mat-select,
+      &>dcm-drop-down,
+      &>range-picker,
+      &>modality,
+      &>person-name-picker,
+      &>issuer-selector,
+      &>.filter_checkbox,
+      &>.checkbox_button {
+        width: 100% !important;
+      }
+
+      /* Submit button positioning - span to the right */
+      &>button.submit {
+        grid-column: 3 / 4 !important;
+        justify-self: end !important;
+        width: auto !important;
+        min-width: 150px !important;
+        margin-top: 20px !important;
+      }
+    }
+  }
+}
+
+/* Responsive: 2 columns on medium screens */
+@media screen and (max-width: 1200px) {
+  filter-generator[filterid="study-filter-patient"] {
+    .filter_block {
+      grid-template-columns: repeat(2, 1fr) !important;
+
+      .line>button.submit {
+        grid-column: 2 / 3 !important;
+      }
+    }
+  }
+}
+
+/* Responsive: 1 column on small screens */
+@media screen and (max-width: 768px) {
+  filter-generator[filterid="study-filter-patient"] {
+    .filter_block {
+      grid-template-columns: 1fr !important;
+
+      .line>button.submit {
+        grid-column: 1 / 2 !important;
+        justify-self: stretch !important;
+        width: 100% !important;
       }
     }
   }
